@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 import style from './style';
 
 const TextField = (props) => {
@@ -12,6 +13,12 @@ const TextField = (props) => {
     </>
   );
 };
+TextField.propTypes = {
+  err: PropTypes.string,
+};
 
+TextField.defaultProps = {
+  err: '',
+};
 
 export default TextField;
