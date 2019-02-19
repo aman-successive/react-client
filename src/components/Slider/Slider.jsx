@@ -58,7 +58,6 @@ class Slider extends Component {
       ...rest
     } = this.props;
     const { index } = this.state;
-    console.log(index);
     const source = (banners) ? banners[index] : defaultBanner;
     return (
       <>
