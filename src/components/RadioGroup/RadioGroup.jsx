@@ -7,10 +7,16 @@ const propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(PropTypes.object),
+  hasErrors: PropTypes.bool,
+  isTouched: PropTypes.bool,
+  getErrors: PropTypes.string,
 };
 const defaultTypes = {
   error: '',
   options: [],
+  hasErrors: false,
+  isTouched: false,
+  getErrors: '',
 };
 class RadioGroup extends Component {
   constructor(props) {
@@ -30,6 +36,7 @@ class RadioGroup extends Component {
         {
           options.map(option => <div {...rest}><input type="radio" name="Sports" value={option.label} />{option.label}</div>)
         }
+        {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}
       </>
     );
   }

@@ -8,11 +8,17 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(PropTypes.object),
   defaultText: PropTypes.string,
+  hasErrors: PropTypes.bool,
+  isTouched: PropTypes.bool,
+  getErrors: PropTypes.string,
 };
 const defaultProps = {
   error: '',
   options: [],
   defaultText: 'select',
+  hasErrors: false,
+  isTouched: false,
+  getErrors: '',
 };
 
 class SelectField extends Component {
@@ -29,14 +35,16 @@ class SelectField extends Component {
       defaultText,
       ...rest
     } = this.props;
+    const errorStyle = (error) ? { ...style.error } : {};
     return (
       <>
-        <select {...rest} value={value} style={{ ...style.base }}>
+        <select {...rest} value={value} style={{ ...style.base, ...errorStyle }}>
           <option value={defaultText} disabled selected>{defaultText}</option>
           {
             options.map(option => <option value={option.label}>{option.label}</option>)
           }
         </select>
+        {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}
       </>
     );
   }
