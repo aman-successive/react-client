@@ -44,7 +44,7 @@ class InputDemo extends Component {
     const { name, value, radio } = this.state;
     this.schema.validate({ name, value, radio }).then(() => {
       this.setState({
-        
+
       });
     })
   }
