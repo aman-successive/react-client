@@ -8,17 +8,11 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(PropTypes.object),
   defaultText: PropTypes.string,
-  hasErrors: PropTypes.bool,
-  isTouched: PropTypes.bool,
-  getErrors: PropTypes.string,
 };
 const defaultProps = {
   error: '',
   options: [],
   defaultText: 'select',
-  hasErrors: false,
-  isTouched: false,
-  getErrors: '',
 };
 
 class SelectField extends Component {

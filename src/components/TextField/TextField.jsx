@@ -6,15 +6,9 @@ const propTypes = {
   error: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  hasErrors: PropTypes.bool,
-  isTouched: PropTypes.bool,
-  getErrors: PropTypes.string,
 };
 const defaultProps = {
   error: '',
-  hasErrors: false,
-  isTouched: false,
-  getErrors: '',
 };
 const TextField = (props) => {
   const {
