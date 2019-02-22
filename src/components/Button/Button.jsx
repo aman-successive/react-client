@@ -27,9 +27,10 @@ class Button extends Component {
       disabled,
       ...rest
     } = this.props;
+    const primary = (color === 'submit' && disabled === false) ? { ...styling.primary } : {};
     return (
       <>
-        <input type="submit" {...rest} disabled={disabled} style={{ ...styling.base, ...color }} />
+        <input type="button" {...rest} disabled={disabled} style={{ ...styling.base, ...primary }} />
       </>
     );
   }

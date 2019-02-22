@@ -22,24 +22,18 @@ class InputDemo extends Component {
         value: '',
         radio: '',
       },
-      touched: {
-        name: false,
-        value: false,
-        radio: false,
-      },
+      touched: false,
       hasError: false,
     };
   }
 
   handlechange = field => (event) => {
-    const { touched } = this.state;
     this.setState({
       [field]: event.target.value,
-      touched: { ...touched, [field]: true },
-    }, this.getError(field));
+    }, this.removeErrors(field));
   };
 
-  getError=field => () => {
+  removeErrors= field => () => {
     const {
       name,
       value,
@@ -51,31 +45,46 @@ class InputDemo extends Component {
       this.setState({
         error: { ...error, [field]: '' },
         hasError: false,
+        touched: true,
       });
     }).catch((err) => {
-      err.inner.forEach((errors) => {
-        if (errors.path === field) {
-          this.setState({
-            error: { ...error, [field]: errors.message },
-            hasError: true,
-          });
-        }
-      });
       if (!err.inner.some(errors => errors.path === field) && hasError) {
         this.setState({
           error: { ...error, [field]: '' },
           hasError: false,
+          touched: false,
         });
       }
     });
   }
 
-  // checkDisabled = () => {
-  //   const { radio, hasError } = this.state;
-  //   if (radio && hasError) {
-  //     return true;
-  //   }
-  // }
+  getError=field => () => {
+    const {
+      name,
+      value,
+      radio,
+      error,
+    } = this.state;
+    this.schema.validate({ name, value, radio }, { abortEarly: false }).catch((err) => {
+      err.inner.forEach((errors) => {
+        if (errors.path === field) {
+          this.setState({
+            error: { ...error, [field]: errors.message },
+            hasError: true,
+            touched: false,
+          });
+        }
+      });
+    });
+  }
+
+  checkDisabled = () => {
+    const { touched, hasError } = this.state;
+    if (touched && !hasError) {
+      return false;
+    }
+    return true;
+  }
 
   render() {
     let array;
@@ -114,7 +123,7 @@ class InputDemo extends Component {
         }
         <div style={{ textAlign: 'right' }}>
           <Button value="Cancel" />
-          <Button value="Submit" disabled />
+          <Button value="Submit" disabled={this.checkDisabled()} color="submit" />
         </div>
       </>
     );
