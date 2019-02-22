@@ -71,13 +71,13 @@ class ChildrenDemo extends Component {
         </Math>
         <Math first={5} second={0} operator="^">
           {(first, second, operator, result) => (
-            <h1>
+            <h5>
               {first}
               {operator}
               {second}
               =
               {result}
-            </h1>
+            </h5>
           )}
         </Math>
       </>
