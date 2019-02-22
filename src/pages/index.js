@@ -1,4 +1,5 @@
 // import TextFieldDemo from './TextFieldDemo';
 import InputDemo from './InputDemo';
+import ChildrenDemo from './ChildrenDemo';
 
-export default InputDemo;
+export { InputDemo, ChildrenDemo };
