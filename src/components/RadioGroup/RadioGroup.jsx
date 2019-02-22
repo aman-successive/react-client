@@ -28,7 +28,7 @@ class RadioGroup extends Component {
       <>
         <h3>What do you do?</h3>
         {
-          options.map(option => <div><input type="radio" {...rest} name="Sports" value={option.label} />{option.label}</div>)
+          options.map(option => <div><input type="radio" {...rest} name="Sports" key={option.label} value={option.label} />{option.label}</div>)
         }
         {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}
       </>
