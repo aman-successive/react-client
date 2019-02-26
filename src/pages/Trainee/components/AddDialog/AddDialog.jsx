@@ -173,6 +173,7 @@ class AddDialog extends Component {
               value={name}
               label="Name *"
               fullWidth
+              error={error.name}
               onClick={this.handlechange('name')}
               onChange={this.handlechange('name')}
               onBlur={this.getError('name')}
@@ -191,6 +192,7 @@ class AddDialog extends Component {
               value={email}
               label="Email Address"
               fullWidth
+              error={error.email}
               onClick={this.handlechange('email')}
               onChange={this.handlechange('email')}
               onBlur={this.getError('email')}
@@ -209,6 +211,7 @@ class AddDialog extends Component {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
+                  error={error.password}
                   value={password}
                   type={passwordIsMasked ? 'password' : 'text'}
                   label="Password"
@@ -235,6 +238,7 @@ class AddDialog extends Component {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
+                  error={error.confirmPassword}
                   value={confirmPassword}
                   type={passwordIsMasked ? 'password' : 'text'}
                   label="Confirm Password"
