@@ -180,6 +180,7 @@ class Login extends Component {
             value={email}
             label="Email Address"
             fullWidth
+            error={error.email}
             onClick={this.handlechange('email')}
             onChange={this.handlechange('email')}
             onBlur={this.getError('email')}
@@ -196,6 +197,7 @@ class Login extends Component {
           <FormHelperText className={classes.error}>{error.email}</FormHelperText>
           <TextField
             fullWidth
+            error={error.password}
             value={password}
             type={passwordIsMasked ? 'password' : 'text'}
             label="Password"
