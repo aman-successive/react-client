@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TextField, IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Person from '@material-ui/icons/Person';
@@ -29,9 +30,9 @@ const styles = () => ({
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8}$/;
 
 const propTypes = {
-  // open: PropTypes.bool.isRequired,
-  // onClose: PropTypes.func.isRequired,
-  // onSubmit: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
@@ -140,7 +141,12 @@ class AddDialog extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const {
+      classes,
+      open,
+      onClose,
+      onSubmit,
+    } = this.props;
     const {
       name,
       email,
@@ -151,119 +157,126 @@ class AddDialog extends Component {
     } = this.state;
     return (
       <>
-        <DialogTitle id="form-dialog-title">Add Trainee</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
+        <Dialog
+          fullWidth
+          maxWidth="md"
+          open={open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Add Trainee</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
           Enter your Trainee Details
-          </DialogContentText>
-          <TextField
-            value={name}
-            label="Name *"
-            fullWidth
-            onClick={this.handlechange('name')}
-            onChange={this.handlechange('name')}
-            onBlur={this.getError('name')}
-            margin="normal"
-            variant="outlined"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Person />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <FormHelperText className={classes.error}>{error.name}</FormHelperText>
-          <TextField
-            value={email}
-            label="Email Address"
-            fullWidth
-            onClick={this.handlechange('email')}
-            onChange={this.handlechange('email')}
-            onBlur={this.getError('email')}
-            margin="normal"
-            variant="outlined"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Email />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <FormHelperText className={classes.error}>{error.email}</FormHelperText>
-          <Grid container spacing={24} fullWidth>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                value={password}
-                type={passwordIsMasked ? 'password' : 'text'}
-                label="Password"
-                onClick={this.handlechange('password')}
-                onChange={this.handlechange('password')}
-                onBlur={this.getError('password')}
-                margin="normal"
-                variant="outlined"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton
-                        className={classes.eye}
-                        onClick={this.togglePasswordMask}
-                      >
-                        {passwordIsMasked ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <FormHelperText className={classes.error}>{error.password}</FormHelperText>
+            </DialogContentText>
+            <TextField
+              value={name}
+              label="Name *"
+              fullWidth
+              onClick={this.handlechange('name')}
+              onChange={this.handlechange('name')}
+              onBlur={this.getError('name')}
+              margin="normal"
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Person />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <FormHelperText className={classes.error}>{error.name}</FormHelperText>
+            <TextField
+              value={email}
+              label="Email Address"
+              fullWidth
+              onClick={this.handlechange('email')}
+              onChange={this.handlechange('email')}
+              onBlur={this.getError('email')}
+              margin="normal"
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <FormHelperText className={classes.error}>{error.email}</FormHelperText>
+            <Grid container spacing={24} fullWidth>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  value={password}
+                  type={passwordIsMasked ? 'password' : 'text'}
+                  label="Password"
+                  onClick={this.handlechange('password')}
+                  onChange={this.handlechange('password')}
+                  onBlur={this.getError('password')}
+                  margin="normal"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton
+                          className={classes.eye}
+                          onClick={this.togglePasswordMask}
+                        >
+                          {passwordIsMasked ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <FormHelperText className={classes.error}>{error.password}</FormHelperText>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  value={confirmPassword}
+                  type={passwordIsMasked ? 'password' : 'text'}
+                  label="Confirm Password"
+                  onClick={this.handlechange('confirmPassword')}
+                  onChange={this.handlechange('confirmPassword')}
+                  onBlur={this.getError('confirmPassword')}
+                  margin="normal"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton
+                          className={classes.eye}
+                          onClick={this.togglePasswordMask}
+                        >
+                          {passwordIsMasked ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <FormHelperText className={classes.error}>{error.confirmPassword}</FormHelperText>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                value={confirmPassword}
-                type={passwordIsMasked ? 'password' : 'text'}
-                label="Confirm Password"
-                onClick={this.handlechange('confirmPassword')}
-                onChange={this.handlechange('confirmPassword')}
-                onBlur={this.getError('confirmPassword')}
-                margin="normal"
-                variant="outlined"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton
-                        className={classes.eye}
-                        onClick={this.togglePasswordMask}
-                      >
-                        {passwordIsMasked ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <FormHelperText className={classes.error}>{error.confirmPassword}</FormHelperText>
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose} color="primary">
               CANCEL
-          </Button>
-          {
-            this.checkDisabled() ? (
-              <Button onClick={this.handleClose} color="primary" disabled>
+            </Button>
+            {
+              this.checkDisabled() ? (
+                <Button onClick={this.handleClose} color="primary" disabled>
               SUBMIT
-              </Button>
-            ) : (
-              <Button onClick={this.handleClose} color="primary">
+                </Button>
+              ) : (
+                <Button onClick={() => onSubmit(name, email, password)} color="primary">
               SUBMIT
-              </Button>
-            )
-          }
-        </DialogActions>
-
+                </Button>
+              )
+            }
+          </DialogActions>
+        </Dialog>
       </>
     );
   }

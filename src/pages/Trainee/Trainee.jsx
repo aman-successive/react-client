@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import { AddDialog } from './components';
 
@@ -10,6 +9,11 @@ class Trainee extends Component {
       open: false,
     };
   }
+
+  handleSubmit = (...values) => {
+    this.setState({ open: false });
+    console.log(...values);
+  };
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -26,15 +30,7 @@ class Trainee extends Component {
         <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
         Add Trainee
         </Button>
-        <Dialog
-          fullWidth
-          maxWidth="md"
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <AddDialog />
-        </Dialog>
+        <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
       </>
     );
   }
