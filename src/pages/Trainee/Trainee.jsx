@@ -12,6 +12,11 @@ class Trainee extends Component {
     };
   }
 
+  handleSubmit = (...values) => {
+    this.setState({ open: false });
+    console.log(...values);
+  };
+
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -28,15 +33,7 @@ class Trainee extends Component {
         <Button style={{ margin: 10 }} variant="outlined" color="primary" onClick={this.handleClickOpen}>
         Add Trainee
         </Button>
-        <Dialog
-          fullWidth
-          maxWidth="md"
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <AddDialog />
-        </Dialog>
+        <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
       </>
     );
   }
