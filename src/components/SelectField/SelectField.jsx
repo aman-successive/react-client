@@ -29,13 +29,14 @@ class SelectField extends Component {
       defaultText,
       ...rest
     } = this.props;
-    const errorStyle = (error) ? { ...style.error } : {};
     return (
       <>
-        <select {...rest} value={value} style={{ ...style.base, ...errorStyle }}>
-          <option value={defaultText} disabled selected>{defaultText}</option>
+        <select {...rest} value={value} style={{ ...style.base }}>
+          <option value={defaultText} key={defaultText} disabled selected>{defaultText}</option>
           {
-            options.map(option => <option value={option.label}>{option.label}</option>)
+            options.map(
+              option => <option value={option.label} key={option.label}>{option.label}</option>,
+            )
           }
         </select>
         {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}
