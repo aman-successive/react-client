@@ -97,7 +97,7 @@ class InputDemo extends Component {
     });
   }
 
-  checkDisabled = () => {
+  isTouched = () => {
     const { touched, hasError } = this.state;
     if (touched && hasError) {
       return false;
@@ -128,6 +128,7 @@ class InputDemo extends Component {
         <div>
           <h3>Select the Game You Play</h3>
           <SelectField
+            value={value}
             options={option}
             onClick={this.handlechange('value')}
             onChange={this.handlechange('value')}
@@ -136,11 +137,11 @@ class InputDemo extends Component {
           />
         </div>
         {
-          (value) ? <RadioGroup options={array} onChange={this.handlechange('radio')} onBlur={this.handleBlur('radio')} error={error.radio} /> : ''
+          (value && (value !== 'select')) ? <RadioGroup options={array} onChange={this.handlechange('radio')} onBlur={this.handleBlur('radio')} error={error.radio} /> : ''
         }
         <div style={{ textAlign: 'right' }}>
           <Button value="Cancel" />
-          <Button value="Submit" disabled={this.checkDisabled()} color="submit" />
+          <Button value="Submit" disabled={this.isTouched()} color="submit" />
         </div>
       </>
     );
