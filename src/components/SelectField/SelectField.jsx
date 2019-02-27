@@ -32,7 +32,7 @@ class SelectField extends Component {
     return (
       <>
         <select {...rest} value={value} style={{ ...style.base }}>
-          <option value={defaultText} key={defaultText} disabled selected>{defaultText}</option>
+          <option value={defaultText} key={defaultText}>{defaultText}</option>
           {
             options.map(
               option => <option value={option.label} key={option.label}>{option.label}</option>,
