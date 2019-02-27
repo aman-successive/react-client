@@ -1,25 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
+import {
+  BrowserRouter as Router, Route, Switch,
+} from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Trainee, Login } from './pages';
-// import { MuiThemeProvider } from '@material-ui/core/styles';
-// import { Typography } from '@material-ui/core';
-// import { ChildrenDemo } from './pages';
-// import theme from './theme';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import {
+  NoMatch, Login, Trainee, InputDemo, ChildrenDemo, TextFieldDemo,
+} from './pages';
+import { AuthRoute, PrivateRoute } from './routes';
+import theme from './theme';
 
-const App = () => (
-  <>
-    {/* <InputDemo /> */}
-    {/* <MuiThemeProvider theme={theme}>
-      <Typography>
-        <ChildrenDemo />
-      </Typography>
-    </MuiThemeProvider> */}
-    {/* <Trainee /> */}
-    <React.Fragment>
-      <CssBaseline />
-      <Trainee />
-      <Login />
-    </React.Fragment>
-  </>
-);
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <>
+        <MuiThemeProvider thme={theme}>
+          <CssBaseline />
+          <Router>
+            <Switch>
+              <PrivateRoute exact path="/" component={Trainee} />
+              <AuthRoute path="/login" component={Login} />
+              <PrivateRoute exact path="/Input" component={InputDemo} />
+              <PrivateRoute exact path="/Children" component={ChildrenDemo} />
+              <PrivateRoute exact path="/Text" component={TextFieldDemo} />
+              <Route component={NoMatch} />
+            </Switch>
+          </Router>
+        </MuiThemeProvider>
+      </>
+    );
+  }
+}
+
 export default App;
