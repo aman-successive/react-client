@@ -72,7 +72,7 @@ class InputDemo extends Component {
           touched: false,
         });
       }
-    });
+    }); this.getError(field);
   }
 
   handleBlur=field => this.getError(field);
