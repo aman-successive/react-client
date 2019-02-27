@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TextField, { SelectField, RadioGroup } from '../../components';
-import { option, FootBall, Cricket } from '../../configs/constants';
+import { option, RADIO_OPTIONS } from '../../configs/constants';
 
 class InputDemo extends Component {
   constructor(props) {
@@ -26,10 +26,8 @@ class InputDemo extends Component {
   render() {
     let array;
     const { name, value } = this.state;
-    if (value === 'FootBall') {
-      array = FootBall;
-    } else if (value === 'Cricket') {
-      array = Cricket;
+    if (value) {
+      array = RADIO_OPTIONS[value];
     }
     return (
       <>
