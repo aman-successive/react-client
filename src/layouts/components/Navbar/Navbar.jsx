@@ -7,7 +7,7 @@ import Person from '@material-ui/icons/Person';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 
 const styles = theme => ({
@@ -45,7 +45,7 @@ class Navbar extends Component {
             <Typography variant="h6" color="inherit" className={classes.grow}>
               Trainee Portal
             </Typography>
-            <Button color="inherit"><Link color="inherit" underline="none" component={RouterLink} to="/">Trainee</Link></Button>
+            <Button color="inherit"><Link color="inherit" underline="none" component={RouterLink} to="/trainee">Trainee</Link></Button>
             <Button color="inherit"><Link color="inherit" underline="none" component={RouterLink} to="/Text">Textfield Demo</Link></Button>
             <Button color="inherit"><Link color="inherit" underline="none" component={RouterLink} to="/Input">Input Demo</Link></Button>
             <Button color="inherit"><Link color="inherit" underline="none" component={RouterLink} to="/Children">Children Demo</Link></Button>
