@@ -12,8 +12,8 @@ const propTypes = {
 const defaultProps = {
   error: '',
   options: [],
-  defaultText: 'select',
   value: '',
+  defaultText: 'select',
 };
 
 class SelectField extends Component {

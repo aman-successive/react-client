@@ -15,7 +15,6 @@ const footBall = [
   { label: 'Defender', value: 1 },
   { label: 'Striker', value: 2 },
 ];
-
 export const RADIO_OPTIONS = {
   FootBall: footBall,
   Cricket: cricket,
