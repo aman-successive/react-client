@@ -1,10 +1,19 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import style from './style';
 
+const propTypes = {
+  err: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+const defaultProps = {
+  err: '',
+};
 const TextField = (props) => {
-  const { err, ...rest } = props;
+  const {
+    err, ...rest
+  } = props;
   const errorStyle = (err) ? { ...style.error } : {};
   return (
     <>
@@ -13,12 +22,8 @@ const TextField = (props) => {
     </>
   );
 };
-TextField.propTypes = {
-  err: PropTypes.string,
-};
 
-TextField.defaultProps = {
-  err: '',
-};
+TextField.propTypes = propTypes;
+TextField.defaultProps = defaultProps;
 
 export default TextField;
