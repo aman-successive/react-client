@@ -44,7 +44,7 @@ class InputDemo extends Component {
     return error;
   }
 
-  handlechange = field => (event) => {
+  handleChange = field => (event) => {
     this.setState({
       [field]: event.target.value,
     }, this.removeErrors(field));
@@ -119,8 +119,8 @@ class InputDemo extends Component {
           <h3>Name</h3>
           <TextField
             value={name}
-            onClick={this.handlechange('name')}
-            onChange={this.handlechange('name')}
+            onClick={this.handleChange('name')}
+            onChange={this.handleChange('name')}
             onBlur={this.handleBlur('name')}
             error={error.name}
           />
@@ -130,14 +130,14 @@ class InputDemo extends Component {
           <SelectField
             value={value}
             options={option}
-            onClick={this.handlechange('value')}
-            onChange={this.handlechange('value')}
+            onClick={this.handleChange('value')}
+            onChange={this.handleChange('value')}
             onBlur={this.handleBlur('value')}
             error={error.value}
           />
         </div>
         {
-          (value && (value !== 'select')) ? <RadioGroup options={array} onChange={this.handlechange('radio')} onBlur={this.handleBlur('radio')} error={error.radio} /> : ''
+          (value && (value !== 'select')) ? <RadioGroup options={array} onChange={this.handleChange('radio')} onBlur={this.handleBlur('radio')} error={error.radio} /> : ''
         }
         <div style={{ textAlign: 'right' }}>
           <Button value="Cancel" />
