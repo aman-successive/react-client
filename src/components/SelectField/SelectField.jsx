@@ -33,11 +33,14 @@ class SelectField extends Component {
     return (
       <>
         <select {...rest} value={value} style={{ ...style.base }}>
-          <option key={defaultText} value={defaultText}>{defaultText}</option>
+          <option value={defaultText} key={defaultText}>{defaultText}</option>
           {
-            options.map(option => <option key={option.label} value={option.label}>{option.label}</option>)
+            options.map(
+              option => <option value={option.label} key={option.label}>{option.label}</option>,
+            )
           }
         </select>
+        {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}
       </>
     );
   }

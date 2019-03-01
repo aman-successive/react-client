@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const propTypes = {
   error: PropTypes.string,
   // value: PropTypes.string.isRequired,
-  // onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(PropTypes.object),
 };
 const defaultTypes = {
@@ -28,8 +28,9 @@ class RadioGroup extends Component {
       <>
         <h3>What do you do?</h3>
         {
-          options.map(option => <div {...rest} key={option.label}><input type="radio" {...rest} name="Sports" key={option.label} value={option.label} />{option.label}</div>)
+          options.map(option => <div {...rest} key={option.label}><input type="radio" name="Sports" value={option.label} key={option.label} />{option.label}</div>)
         }
+        {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}
       </>
     );
   }
