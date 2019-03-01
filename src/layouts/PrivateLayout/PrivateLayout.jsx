@@ -19,7 +19,6 @@ class PrivateLayout extends Component {
         <Navbar />
         <div style={{ margin: 10 }} className="main">{children}</div>
       </>
-
     );
   }
 }
