@@ -6,8 +6,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TableHead from '@material-ui/core/TableHead';
+import IconButton from '@material-ui/core/IconButton';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
@@ -20,12 +23,21 @@ const propTypes = {
   onSort: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  actions: PropTypes.arrayOf(PropTypes.object),
+  count: PropTypes.number,
+  page: PropTypes.number,
+  rowsPerPage: PropTypes.number,
+  onChangePage: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
   id: '',
   columns: [],
   data: [],
+  actions: [],
+  count: 0,
+  page: 0,
+  rowsPerPage: 100,
 };
 
 const styles = theme => ({
@@ -42,6 +54,9 @@ const styles = theme => ({
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default,
     },
+  },
+  iconCell: {
+    display: 'flex',
   },
 });
 
@@ -65,6 +80,11 @@ class Tables extends Component {
       orderBy,
       classes,
       onSelect,
+      page,
+      count,
+      actions,
+      rowsPerPage,
+      onChangePage,
     } = this.props;
     return (
       <Paper className={classes.root}>
@@ -92,14 +112,37 @@ class Tables extends Component {
           <TableBody>
             {
               data.map(trainee => (
-                <TableRow key={trainee.id} hover className={classes.tableRow} onClick={() => onSelect(trainee.id)}>
+                <TableRow key={trainee.id} hover className={classes.tableRow}>
                   {
-                    columns.map(cell => <TableCell key={cell.field} align={cell.align}>{(cell.format) ? cell.format(trainee[cell.field]) : trainee[cell.field]}</TableCell>)
+                    columns.map(cell => <TableCell onClick={() => onSelect(trainee.id)} key={cell.field} align={cell.align}>{(cell.format) ? cell.format(trainee[cell.field]) : trainee[cell.field]}</TableCell>)
                   }
+                  <TableCell>
+                    {
+                      actions.map(action => <IconButton className={classes.iconCell} onClick={() => action.handler(trainee)}>{action.icon}</IconButton>)
+                    }
+                  </TableCell>
                 </TableRow>
               ))
             }
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[]}
+                colSpan={3}
+                count={count}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page',
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page',
+                }}
+                onChangePage={onChangePage}
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </Paper>
     );

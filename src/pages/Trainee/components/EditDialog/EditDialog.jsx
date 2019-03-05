@@ -1,0 +1,207 @@
+/* eslint-disable react/forbid-prop-types */
+import * as yup from 'yup';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { TextField } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Person from '@material-ui/icons/Person';
+import Email from '@material-ui/icons/Email';
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
+const styles = () => ({
+  eye: {
+    cursor: 'pointer',
+  },
+  error: {
+    color: 'red',
+  },
+});
+
+const propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+};
+
+class EditDialog extends Component {
+  schema = yup.object().shape({
+    name: yup.string().min(3).required().label('name'),
+    email: yup.string().email().required().label('email'),
+  });
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      email: '',
+      error: {
+        name: '',
+        email: '',
+      },
+      touched: false,
+      hasError: false,
+    };
+  }
+
+  handlechange = field => (event) => {
+    this.setState({
+      [field]: event.target.value,
+    }, this.removeErrors(field));
+  };
+
+  removeErrors= field => () => {
+    const {
+      name,
+      email,
+      error,
+      hasError,
+    } = this.state;
+    this.schema.validate({
+      name,
+      email,
+    }, { abortEarly: false }).then(() => {
+      this.setState({
+        error: { ...error, [field]: '' },
+        hasError: false,
+        touched: true,
+      });
+    }).catch((err) => {
+      if (!err.inner.some(errors => errors.path === field) && hasError) {
+        this.setState({
+          error: { ...error, [field]: '' },
+          hasError: false,
+          touched: false,
+        });
+      }
+    });
+  }
+
+  getError=field => () => {
+    const {
+      name,
+      email,
+      error,
+    } = this.state;
+    this.schema.validate({
+      name,
+      email,
+    }, { abortEarly: false }).catch((err) => {
+      err.inner.forEach((errors) => {
+        if (errors.path === field) {
+          this.setState({
+            error: { ...error, [field]: errors.message },
+            hasError: true,
+            touched: false,
+          });
+        }
+      });
+    });
+  }
+
+  checkDisabled = () => {
+    const { touched, hasError } = this.state;
+    if (touched && !hasError) {
+      return false;
+    }
+    return true;
+  }
+
+  render() {
+    const {
+      classes,
+      open,
+      onClose,
+      onSubmit,
+      data,
+    } = this.props;
+    const {
+      name,
+      email,
+      error,
+    } = this.state;
+    return (
+      <>
+        <Dialog
+          fullWidth
+          maxWidth="md"
+          open={open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Edit Trainee</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+          Enter your Trainee Details
+            </DialogContentText>
+            <TextField
+              defaultValue={data.name}
+              label="Name *"
+              fullWidth
+              error={error.name}
+              onClick={this.handlechange('name')}
+              onChange={this.handlechange('name')}
+              onBlur={this.getError('name')}
+              margin="normal"
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Person />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <FormHelperText className={classes.error}>{error.name}</FormHelperText>
+            <TextField
+              defaultValue={data.email}
+              label="Email Address"
+              fullWidth
+              error={error.email}
+              onClick={this.handlechange('email')}
+              onChange={this.handlechange('email')}
+              onBlur={this.getError('email')}
+              margin="normal"
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <FormHelperText className={classes.error}>{error.email}</FormHelperText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose} color="primary">
+              CANCEL
+            </Button>
+            {
+              this.checkDisabled() ? (
+                <Button onClick={this.handleClose} color="primary" disabled>
+              SUBMIT
+                </Button>
+              ) : (
+                <Button onClick={() => onSubmit(name, email)} color="primary">
+              SUBMIT
+                </Button>
+              )
+            }
+          </DialogActions>
+        </Dialog>
+      </>
+    );
+  }
+}
+
+EditDialog.propTypes = propTypes;
+export default withStyles(styles)(EditDialog);
