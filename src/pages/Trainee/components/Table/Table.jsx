@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
@@ -14,6 +15,10 @@ const propTypes = {
   id: PropTypes.string,
   columns: PropTypes.arrayOf(PropTypes.object),
   data: PropTypes.arrayOf(PropTypes.object),
+  orderBy: PropTypes.string.isRequired,
+  order: PropTypes.string.isRequired,
+  onSort: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
@@ -32,6 +37,12 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
+  tableRow: {
+    cursor: 'pointer',
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.background.default,
+    },
+  },
 });
 
 class Tables extends Component {
@@ -40,12 +51,20 @@ class Tables extends Component {
     this.state = {};
   }
 
+  createSortHandler = property => () => {
+    const { onSort } = this.props;
+    onSort(property);
+  };
+
   render() {
     const {
       id,
       columns,
       data,
+      order,
+      orderBy,
       classes,
+      onSelect,
     } = this.props;
     return (
       <Paper className={classes.root}>
@@ -53,16 +72,29 @@ class Tables extends Component {
           <TableHead>
             <TableRow key="head">
               {
-                columns.map(cell => <TableCell key={cell.field} align={cell.align}>{cell.label || cell.field}</TableCell>)
+                columns.map(cell => (
+                  <TableCell
+                    key={cell.field}
+                    align={cell.align}
+                  >
+                    <TableSortLabel
+                      active={orderBy === cell.label}
+                      direction={order}
+                      onClick={this.createSortHandler(cell.label)}
+                    >
+                      {cell.label || cell.field}
+                    </TableSortLabel>
+                  </TableCell>
+                ))
               }
             </TableRow>
           </TableHead>
           <TableBody>
             {
               data.map(trainee => (
-                <TableRow key={trainee.id}>
+                <TableRow key={trainee.id} hover className={classes.tableRow} onClick={() => onSelect(trainee.id)}>
                   {
-                    columns.map(cell => <TableCell key={cell.field} align={cell.align}>{trainee[cell.field]}</TableCell>)
+                    columns.map(cell => <TableCell key={cell.field} align={cell.align}>{(cell.format) ? cell.format(trainee[cell.field]) : trainee[cell.field]}</TableCell>)
                   }
                 </TableRow>
               ))

@@ -1,3 +1,5 @@
+import getDateFormatted from '../../../libs/utils/moment';
+
 const columnData = [
   {
     field: 'name',
@@ -7,6 +9,13 @@ const columnData = [
   {
     field: 'email',
     label: 'Email Address',
+    format: value => value && value.toUpperCase(),
+  },
+  {
+    field: 'createdAt',
+    label: 'Date',
+    align: 'right',
+    format: getDateFormatted,
   },
 ];
 

@@ -1,7 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import * as moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Link as RouterLink } from 'react-router-dom';
@@ -13,7 +12,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import trainees from './data/trainee';
 import NoMatch from '../NoMatch';
-
+import getDateFormatted from '../../libs/utils/moment';
 
 const styles = theme => ({
   layout: {
@@ -62,12 +61,6 @@ class TraineeDetail extends Component {
     return trainee;
   }
 
-  getDateFormatted = (date) => {
-    moment.defaultFormat = 'dddd, MMMM Do YYYY, h:mm:ss a';
-    const newDate = moment.utc(date).toDate().toString();
-    return (moment(newDate).format(moment.defaultFormat));
-  }
-
   render() {
     const { classes, match } = this.props;
     const { id } = match.params;
@@ -92,7 +85,7 @@ class TraineeDetail extends Component {
                     {trainee.name}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    {this.getDateFormatted(trainee.createdAt)}
+                    {getDateFormatted(trainee.createdAt)}
                   </Typography>
                   <Typography variant="subtitle1" paragraph>
                     {trainee.email}
