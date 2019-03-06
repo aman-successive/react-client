@@ -125,24 +125,28 @@ class Tables extends Component {
               ))
             }
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[]}
-                colSpan={3}
-                count={count}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                backIconButtonProps={{
-                  'aria-label': 'Previous Page',
-                }}
-                nextIconButtonProps={{
-                  'aria-label': 'Next Page',
-                }}
-                onChangePage={onChangePage}
-              />
-            </TableRow>
-          </TableFooter>
+          {
+            (count !== 0) ? (
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[]}
+                    colSpan={3}
+                    count={count}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    backIconButtonProps={{
+                      'aria-label': 'Previous Page',
+                    }}
+                    nextIconButtonProps={{
+                      'aria-label': 'Next Page',
+                    }}
+                    onChangePage={onChangePage}
+                  />
+                </TableRow>
+              </TableFooter>
+            ) : ''
+          }
         </Table>
       </Paper>
     );

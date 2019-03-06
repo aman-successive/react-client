@@ -50,16 +50,16 @@ class TraineeList extends Component {
   }
 
   handleEditDialogClose = () => {
-    this.setState({ editDialogOpen: false });
+    this.setState({ editDialogOpen: false, data: '' });
   }
 
   handleDeleteDialogClose = () => {
-    this.setState({ deleteDialogOpen: false });
+    this.setState({ deleteDialogOpen: false, data: '' });
   }
 
   handleDeleteDialogSubmit = (values) => {
-    this.setState({ deleteDialogOpen: false });
     console.log('Deleted Data', values);
+    this.setState({ deleteDialogOpen: false, data: '' });
   }
 
   handlePageChange = (event, pages) => {
@@ -69,9 +69,9 @@ class TraineeList extends Component {
   }
 
   handleEditDialogSubmit = (...values) => {
-    this.setState({ editDialogOpen: false });
     console.log(...values);
-  }
+    this.setState({ editDialogOpen: false, data: '' });
+  };
 
   handleSubmit = (...values) => {
     this.setState({ open: false });
@@ -102,18 +102,24 @@ class TraineeList extends Component {
         Add Trainee
         </Button>
         <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
-        <EditDialog
-          open={editDialogOpen}
-          data={data}
-          onClose={this.handleEditDialogClose}
-          onSubmit={this.handleEditDialogSubmit}
-        />
-        <DeleteDialog
-          open={deleteDialogOpen}
-          data={data}
-          onClose={this.handleDeleteDialogClose}
-          onSubmit={this.handleDeleteDialogSubmit}
-        />
+        {
+          (data) ? (
+            <>
+              <EditDialog
+                open={editDialogOpen}
+                data={data}
+                onClose={this.handleEditDialogClose}
+                onSubmit={this.handleEditDialogSubmit}
+              />
+              <DeleteDialog
+                open={deleteDialogOpen}
+                data={data}
+                onClose={this.handleDeleteDialogClose}
+                onSubmit={this.handleDeleteDialogSubmit}
+              />
+            </>
+          ) : ''
+        }
         <Tables
           id="id"
           data={trainees}

@@ -40,9 +40,11 @@ class EditDialog extends Component {
 
   constructor(props) {
     super(props);
+    const { data } = this.props;
+    const { name, email } = data;
     this.state = {
-      name: '',
-      email: '',
+      name,
+      email,
       error: {
         name: '',
         email: '',
@@ -121,7 +123,6 @@ class EditDialog extends Component {
       open,
       onClose,
       onSubmit,
-      data,
     } = this.props;
     const {
       name,
@@ -143,7 +144,7 @@ class EditDialog extends Component {
           Enter your Trainee Details
             </DialogContentText>
             <TextField
-              defaultValue={data.name}
+              value={name}
               label="Name *"
               fullWidth
               error={error.name}
@@ -162,7 +163,7 @@ class EditDialog extends Component {
             />
             <FormHelperText className={classes.error}>{error.name}</FormHelperText>
             <TextField
-              defaultValue={data.email}
+              value={email}
               label="Email Address"
               fullWidth
               error={error.email}
