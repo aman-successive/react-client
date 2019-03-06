@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import { IconButton, Snackbar } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
@@ -31,6 +32,11 @@ const styles = theme => ({
     alignItems: 'center',
   },
 });
+
+const propTypes = {
+  classes: PropTypes.objectOf(PropTypes.object).isRequired,
+  children: PropTypes.element.isRequired,
+};
 
 class SnackBarProvider extends Component {
   constructor(props) {
@@ -96,5 +102,7 @@ class SnackBarProvider extends Component {
     );
   }
 }
+SnackBarProvider.propTypes = propTypes;
+
 export const SnackBarConsumer = SnackBarContext.Consumer;
 export default withStyles(styles)(SnackBarProvider);
