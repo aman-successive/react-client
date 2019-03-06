@@ -14,6 +14,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import { SnackBarConsumer } from '../../../../contexts/SnackBarProvider/SnackBarProvider';
 
 const styles = () => ({
   eye: {
@@ -131,74 +132,85 @@ class EditDialog extends Component {
     } = this.state;
     return (
       <>
-        <Dialog
-          fullWidth
-          maxWidth="md"
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Edit Trainee</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-          Enter your Trainee Details
-            </DialogContentText>
-            <TextField
-              value={name}
-              label="Name *"
+        <SnackBarConsumer>
+          {({ openSnackbar }) => (
+            <Dialog
               fullWidth
-              error={error.name}
-              onClick={this.handlechange('name')}
-              onChange={this.handlechange('name')}
-              onBlur={this.getError('name')}
-              margin="normal"
-              variant="outlined"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Person />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <FormHelperText className={classes.error}>{error.name}</FormHelperText>
-            <TextField
-              value={email}
-              label="Email Address"
-              fullWidth
-              error={error.email}
-              onClick={this.handlechange('email')}
-              onChange={this.handlechange('email')}
-              onBlur={this.getError('email')}
-              margin="normal"
-              variant="outlined"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <FormHelperText className={classes.error}>{error.email}</FormHelperText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onClose} color="primary">
-              CANCEL
-            </Button>
-            {
-              this.checkDisabled() ? (
-                <Button onClick={this.handleClose} color="primary" disabled>
-              SUBMIT
+              maxWidth="md"
+              open={open}
+              onClose={this.handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Edit Trainee</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+            Enter your Trainee Details
+                </DialogContentText>
+                <TextField
+                  value={name}
+                  label="Name *"
+                  fullWidth
+                  error={error.name}
+                  onClick={this.handlechange('name')}
+                  onChange={this.handlechange('name')}
+                  onBlur={this.getError('name')}
+                  margin="normal"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Person />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <FormHelperText className={classes.error}>{error.name}</FormHelperText>
+                <TextField
+                  value={email}
+                  label="Email Address"
+                  fullWidth
+                  error={error.email}
+                  onClick={this.handlechange('email')}
+                  onChange={this.handlechange('email')}
+                  onBlur={this.getError('email')}
+                  margin="normal"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Email />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <FormHelperText className={classes.error}>{error.email}</FormHelperText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={onClose} color="primary">
+                CANCEL
                 </Button>
-              ) : (
-                <Button onClick={() => onSubmit(name, email)} color="primary">
-              SUBMIT
-                </Button>
-              )
-            }
-          </DialogActions>
-        </Dialog>
+                {
+                  this.checkDisabled() ? (
+                    <Button onClick={this.handleClose} color="primary" disabled>
+                      SUBMIT
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        onSubmit(name, email);
+                        openSnackbar('Data Edited', 'success');
+                      }}
+                      color="primary"
+                    >
+                      SUBMIT
+                    </Button>
+                  )
+                }
+              </DialogActions>
+            </Dialog>
+          )}
+        </SnackBarConsumer>
+
       </>
     );
   }

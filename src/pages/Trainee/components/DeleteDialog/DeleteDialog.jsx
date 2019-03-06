@@ -8,6 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { SnackBarConsumer } from '../../../../contexts/SnackBarProvider/SnackBarProvider';
 
 const styles = () => ({
   eye: {
@@ -32,6 +33,7 @@ class DeleteDialog extends Component {
   }
 
   render() {
+    const Date = '2019-02-14T18:15:11.778Z';
     const {
       open,
       onClose,
@@ -40,28 +42,42 @@ class DeleteDialog extends Component {
     } = this.props;
     return (
       <>
-        <Dialog
-          fullWidth
-          maxWidth="md"
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Delete Trainee</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-          Do you really want to delete this trainee?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onClose} color="primary">
-              CANCEL
-            </Button>
-            <Button onClick={() => onSubmit(data)} color="primary">
-              DELETE
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <SnackBarConsumer>
+          {({ openSnackbar }) => (
+            <Dialog
+              fullWidth
+              maxWidth="md"
+              open={open}
+              onClose={this.handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Delete Trainee</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                Do you really want to delete this trainee?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={onClose} color="primary">
+                CANCEL
+                </Button>
+                <Button
+                  onClick={() => {
+                    onSubmit(data);
+                    if (data.createdAt < Date) {
+                      openSnackbar('Trainee cannot be deleted ', 'error');
+                    } else {
+                      openSnackbar('Trainee deleted ', 'success');
+                    }
+                  }}
+                  color="primary"
+                >
+                DELETE
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )}
+        </SnackBarConsumer>
       </>
     );
   }

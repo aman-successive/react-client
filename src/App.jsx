@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { SnackBarProvider } from './contexts';
 import {
   NoMatch, Login, Trainee, InputDemo, ChildrenDemo, TextFieldDemo,
 } from './pages';
@@ -19,22 +20,24 @@ class App extends Component {
   render() {
     return (
       <>
-        <MuiThemeProvider thme={theme}>
-          <CssBaseline />
-          <Router>
-            <Switch>
-              <Route exact path="/">
-                <Redirect to="/trainee" />
-              </Route>
-              <PrivateRoute path="/trainee" component={Trainee} />
-              <AuthRoute path="/login" component={Login} />
-              <PrivateRoute path="/Input" component={InputDemo} />
-              <PrivateRoute path="/Children" component={ChildrenDemo} />
-              <PrivateRoute path="/Text" component={TextFieldDemo} />
-              <Route component={NoMatch} />
-            </Switch>
-          </Router>
-        </MuiThemeProvider>
+        <SnackBarProvider>
+          <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            <Router>
+              <Switch>
+                <Route exact path="/">
+                  <Redirect to="/trainee" />
+                </Route>
+                <PrivateRoute path="/trainee" component={Trainee} />
+                <AuthRoute path="/login" component={Login} />
+                <PrivateRoute path="/Input" component={InputDemo} />
+                <PrivateRoute path="/Children" component={ChildrenDemo} />
+                <PrivateRoute path="/Text" component={TextFieldDemo} />
+                <Route component={NoMatch} />
+              </Switch>
+            </Router>
+          </MuiThemeProvider>
+        </SnackBarProvider>
       </>
     );
   }

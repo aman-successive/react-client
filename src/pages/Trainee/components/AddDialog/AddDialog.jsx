@@ -17,6 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import { SnackBarConsumer } from '../../../../contexts/SnackBarProvider/SnackBarProvider';
 
 const styles = () => ({
   eye: {
@@ -167,7 +168,7 @@ class AddDialog extends Component {
           <DialogTitle id="form-dialog-title">Add Trainee</DialogTitle>
           <DialogContent>
             <DialogContentText>
-          Enter your Trainee Details
+            Enter your Trainee Details
             </DialogContentText>
             <TextField
               value={name}
@@ -266,17 +267,27 @@ class AddDialog extends Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={onClose} color="primary">
-              CANCEL
+                CANCEL
             </Button>
             {
               this.checkDisabled() ? (
                 <Button onClick={this.handleClose} color="primary" disabled>
-              SUBMIT
+                    SUBMIT
                 </Button>
               ) : (
-                <Button onClick={() => onSubmit(name, email, password)} color="primary">
-              SUBMIT
-                </Button>
+                <SnackBarConsumer>
+                  {({ openSnackbar }) => (
+                    <Button
+                      onClick={() => {
+                        onSubmit(name, email, password);
+                        openSnackbar('New trainee added', 'success');
+                      }}
+                      color="primary"
+                    >
+                    SUBMIT
+                    </Button>
+                  )}
+                </SnackBarConsumer>
               )
             }
           </DialogActions>
