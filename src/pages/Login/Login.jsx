@@ -250,7 +250,6 @@ class Login extends Component {
   }
 }
 
-
 Login.propTypes = propTypes;
 
 export default withStyles(styles)(Login);

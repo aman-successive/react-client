@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -44,11 +44,7 @@ class Math extends Component {
     } = this.props;
     const result = this.calculateResult(first, second, operator);
     console.log(result);
-    return (
-      <div>
-        { children(first, second, operator, result) }
-      </div>
-    );
+    return children(first, second, operator, result);
   }
 }
 
