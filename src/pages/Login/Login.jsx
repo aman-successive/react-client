@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/forbid-prop-types */
 import * as yup from 'yup';
 import React, { Component } from 'react';
@@ -10,11 +11,14 @@ import Email from '@material-ui/icons/Email';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import { callApi } from '../../libs/utils/api';
+import { SnackBarConsumer } from '../../contexts/SnackBarProvider/SnackBarProvider';
 
 const styles = theme => ({
   eye: {
@@ -54,16 +58,16 @@ const styles = theme => ({
   },
 });
 
-const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8}$/;
 
 const propTypes = {
   classes: PropTypes.object.isRequired,
+  history: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 class Login extends Component {
   schema = yup.object().shape({
     email: yup.string().email().required().label('email'),
-    password: yup.string().matches(passwordRegex, 'Must contain 8 characters, atleast one uppercase letter, one lowercase and one number').required().label('password'),
+    password: yup.string().required().label('password'),
   });
 
   constructor(props) {
@@ -75,6 +79,7 @@ class Login extends Component {
         email: '',
         password: '',
       },
+      loading: false,
       touched: false,
       hasError: false,
       passwordIsMasked: true,
@@ -92,6 +97,21 @@ class Login extends Component {
       [field]: event.target.value,
     }, this.removeErrors(field));
   };
+
+  handleSubmit = async (e, openSnackbar) => {
+    this.setState({
+      loading: true,
+    });
+    const { history } = this.props;
+    const { email, password } = this.state;
+    e.preventDefault();
+    const token = await callApi('/user/login', 'post', email, password);
+    if (token.status) {
+      history.push('/trainee');
+    } else {
+      openSnackbar('Error Message', 'error');
+    }
+  }
 
   removeErrors= field => () => {
     const {
@@ -164,6 +184,7 @@ class Login extends Component {
       email,
       password,
       error,
+      loading,
       passwordIsMasked,
     } = this.state;
     return (
@@ -221,7 +242,7 @@ class Login extends Component {
           />
           <FormHelperText className={classes.error}>{error.password}</FormHelperText>
           {
-            this.checkDisabled() ? (
+            (this.checkDisabled()) ? (
               <Button
                 type="submit"
                 fullWidth
@@ -233,15 +254,34 @@ class Login extends Component {
               Sign in
               </Button>
             ) : (
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-              Sign in
-              </Button>
+              (loading === true) ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  disabled
+                >
+                  <CircularProgress size={25} />
+                </Button>
+              ) : (
+                <SnackBarConsumer>
+                  {({ openSnackbar }) => (
+                    <Button
+                      type="submit"
+                      fullWidth
+                      onClick={e => this.handleSubmit(e, openSnackbar)}
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                    >
+                  Sign in
+                    </Button>
+                  )}
+                </SnackBarConsumer>
+              )
+
             )
           }
         </Paper>
