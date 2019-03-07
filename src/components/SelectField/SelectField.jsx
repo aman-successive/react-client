@@ -4,7 +4,7 @@ import style from './style';
 
 const propTypes = {
   error: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(PropTypes.object),
   defaultText: PropTypes.string,
@@ -12,6 +12,7 @@ const propTypes = {
 const defaultProps = {
   error: '',
   options: [],
+  value: '',
   defaultText: 'select',
 };
 
@@ -29,13 +30,14 @@ class SelectField extends Component {
       defaultText,
       ...rest
     } = this.props;
-    const errorStyle = (error) ? { ...style.error } : {};
     return (
       <>
-        <select {...rest} value={value} style={{ ...style.base, ...errorStyle }}>
-          <option value={defaultText} disabled selected>{defaultText}</option>
+        <select {...rest} value={value} style={{ ...style.base }}>
+          <option value={defaultText} key={defaultText}>{defaultText}</option>
           {
-            options.map(option => <option value={option.label}>{option.label}</option>)
+            options.map(
+              option => <option value={option.label} key={option.label}>{option.label}</option>,
+            )
           }
         </select>
         {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}

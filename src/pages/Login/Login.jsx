@@ -63,7 +63,7 @@ const propTypes = {
 
 class Login extends Component {
   schema = yup.object().shape({
-    email: yup.string().email().required().label('email'),
+    email: yup.string().required().email().label('email'),
     password: yup.string().matches(passwordRegex, 'Must contain 8 characters, atleast one uppercase letter, one lowercase and one number').required().label('password'),
   });
 
@@ -119,6 +119,17 @@ class Login extends Component {
           error: { ...error, [field]: '' },
           hasError: { ...hasError, [field]: false },
           touched: false,
+        });
+      }
+      if (hasError[field]) {
+        err.inner.forEach((errors) => {
+          if (errors.path === field) {
+            this.setState({
+              error: { ...error, [field]: errors.message },
+              hasError: { ...hasError, [field]: true },
+              touched: false,
+            });
+          }
         });
       }
     });
@@ -253,7 +264,6 @@ class Login extends Component {
     );
   }
 }
-
 
 Login.propTypes = propTypes;
 
