@@ -39,7 +39,6 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 8,
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
   },
   avatar: {
@@ -121,17 +120,15 @@ class Login extends Component {
           touched: false,
         });
       }
-      if (hasError[field]) {
-        err.inner.forEach((errors) => {
-          if (errors.path === field) {
-            this.setState({
-              error: { ...error, [field]: errors.message },
-              hasError: { ...hasError, [field]: true },
-              touched: false,
-            });
-          }
-        });
-      }
+      err.inner.forEach((errors) => {
+        if (errors.path === field) {
+          this.setState({
+            error: { ...error, [field]: errors.message },
+            hasError: { ...hasError, [field]: true },
+            touched: false,
+          });
+        }
+      });
     });
   }
 
@@ -196,7 +193,6 @@ class Login extends Component {
             label="Email Address"
             fullWidth
             error={hasError.email}
-            onClick={this.handlechange('email')}
             onChange={this.handlechange('email')}
             onBlur={this.getError('email')}
             margin="normal"
@@ -216,7 +212,6 @@ class Login extends Component {
             value={password}
             type={passwordIsMasked ? 'password' : 'text'}
             label="Password"
-            onClick={this.handlechange('password')}
             onChange={this.handlechange('password')}
             onBlur={this.getError('password')}
             margin="normal"
