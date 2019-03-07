@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import { AddDialog } from './components';
 import { Navbar } from '../components';

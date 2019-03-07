@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable react/forbid-prop-types */
 import * as yup from 'yup';
 import React, { Component } from 'react';
@@ -76,7 +77,10 @@ class Login extends Component {
         password: '',
       },
       touched: false,
-      hasError: false,
+      hasError: {
+        email: false,
+        password: false,
+      },
       passwordIsMasked: true,
     };
   }
@@ -95,29 +99,25 @@ class Login extends Component {
 
   removeErrors= field => () => {
     const {
-      name,
       email,
       password,
-      confirmPassword,
       error,
       hasError,
     } = this.state;
     this.schema.validate({
-      name,
       email,
       password,
-      confirmPassword,
     }, { abortEarly: false }).then(() => {
       this.setState({
         error: { ...error, [field]: '' },
-        hasError: false,
+        hasError: { ...hasError, [field]: false },
         touched: true,
       });
     }).catch((err) => {
       if (!err.inner.some(errors => errors.path === field) && hasError) {
         this.setState({
           error: { ...error, [field]: '' },
-          hasError: false,
+          hasError: { ...hasError, [field]: false },
           touched: false,
         });
       }
@@ -126,23 +126,20 @@ class Login extends Component {
 
   getError=field => () => {
     const {
-      name,
       email,
       password,
-      confirmPassword,
+      hasError,
       error,
     } = this.state;
     this.schema.validate({
-      name,
       email,
       password,
-      confirmPassword,
     }, { abortEarly: false }).catch((err) => {
       err.inner.forEach((errors) => {
         if (errors.path === field) {
           this.setState({
             error: { ...error, [field]: errors.message },
-            hasError: true,
+            hasError: { ...hasError, [field]: true },
             touched: false,
           });
         }
@@ -152,7 +149,13 @@ class Login extends Component {
 
   checkDisabled = () => {
     const { touched, hasError } = this.state;
-    if (touched && !hasError) {
+    let result = false;
+    for (const i in hasError) {
+      if (hasError[i] === false) {
+        result = true;
+      }
+    }
+    if (touched && result) {
       return false;
     }
     return true;
@@ -164,6 +167,7 @@ class Login extends Component {
       email,
       password,
       error,
+      hasError,
       passwordIsMasked,
     } = this.state;
     return (
@@ -180,7 +184,7 @@ class Login extends Component {
             value={email}
             label="Email Address"
             fullWidth
-            error={error.email}
+            error={hasError.email}
             onClick={this.handlechange('email')}
             onChange={this.handlechange('email')}
             onBlur={this.getError('email')}
@@ -197,7 +201,7 @@ class Login extends Component {
           <FormHelperText className={classes.error}>{error.email}</FormHelperText>
           <TextField
             fullWidth
-            error={error.password}
+            error={hasError.password}
             value={password}
             type={passwordIsMasked ? 'password' : 'text'}
             label="Password"
