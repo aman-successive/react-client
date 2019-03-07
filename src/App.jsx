@@ -1,5 +1,6 @@
 import React from 'react';
-import { Trainee } from './pages';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { Trainee, Login } from './pages';
 // import { MuiThemeProvider } from '@material-ui/core/styles';
 // import { Typography } from '@material-ui/core';
 // import { ChildrenDemo } from './pages';
@@ -13,7 +14,12 @@ const App = () => (
         <ChildrenDemo />
       </Typography>
     </MuiThemeProvider> */}
-    <Trainee />
+    {/* <Trainee /> */}
+    <React.Fragment>
+      <CssBaseline />
+      <Trainee />
+      <Login />
+    </React.Fragment>
   </>
 );
 export default App;
