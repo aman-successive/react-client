@@ -4,10 +4,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PropTypes from 'prop-types';
 import {
-  AddDialog, Tables, EditDialog, DeleteDialog,
+  AddDialog, EditDialog, DeleteDialog,
 } from './components';
+import { Tables } from '../../components';
 import trainees from './data/trainee';
 import columnData from './data/column';
+import { callApi } from '../../libs/utils/api';
 
 const propTypes = {
   history: PropTypes.objectOf(PropTypes.object).isRequired,
@@ -24,6 +26,9 @@ class TraineeList extends Component {
       orderBy: '',
       page: 0,
       data: '',
+      traineeList: '',
+      limit: 20,
+      skip: 0,
     };
   }
 
@@ -65,6 +70,8 @@ class TraineeList extends Component {
   handlePageChange = (event, pages) => {
     this.setState({
       page: pages,
+      skip: 20 * pages,
+      limit: 20 * (pages + 1),
     });
   }
 
@@ -95,7 +102,15 @@ class TraineeList extends Component {
       data,
       editDialogOpen,
       deleteDialogOpen,
+      traineeList,
+      limit,
+      skip,
     } = this.state;
+    callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
+      this.setState({
+        traineeList: list.data.records,
+      });
+    });
     return (
       <>
         <Button style={{ margin: 10 }} variant="outlined" color="primary" onClick={this.handleClickOpen}>
@@ -122,7 +137,7 @@ class TraineeList extends Component {
         }
         <Tables
           id="id"
-          data={trainees}
+          data={traineeList || trainees}
           columns={columnData}
           actions={[
             {
@@ -138,7 +153,7 @@ class TraineeList extends Component {
           orderBy={orderBy}
           onSort={this.handleRequestSort}
           onSelect={this.handleSelect}
-          rowsPerPage={10}
+          rowsPerPage={20}
           count={100}
           page={page}
           onChangePage={this.handlePageChange}

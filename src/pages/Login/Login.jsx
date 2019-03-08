@@ -104,8 +104,12 @@ class Login extends Component {
     });
     const { history } = this.props;
     const { email, password } = this.state;
+    const data = {
+      email,
+      password,
+    };
     e.preventDefault();
-    const token = await callApi('/user/login', 'post', email, password);
+    const token = await callApi('/api/user/login', 'post', data);
     if (token.status) {
       window.localStorage.setItem('Admin', token.data);
       console.log(window.localStorage.getItem('Admin'));
@@ -286,7 +290,6 @@ class Login extends Component {
                   )}
                 </SnackBarConsumer>
               )
-
             )
           }
         </Paper>

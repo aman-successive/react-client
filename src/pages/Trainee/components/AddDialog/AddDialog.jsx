@@ -1,15 +1,16 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/forbid-prop-types */
 import * as yup from 'yup';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TextField, IconButton } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Person from '@material-ui/icons/Person';
 import Email from '@material-ui/icons/Email';
-import Visibility from '@material-ui/icons/Visibility';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -18,6 +19,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { SnackBarConsumer } from '../../../../contexts/SnackBarProvider/SnackBarProvider';
+import { callApi } from '../../../../libs/utils/api';
 
 const styles = () => ({
   eye: {
@@ -58,23 +60,41 @@ class AddDialog extends Component {
         password: '',
         confirmPassword: '',
       },
+      loading: false,
       touched: false,
       hasError: false,
-      passwordIsMasked: true,
     };
   }
-
-  togglePasswordMask = () => {
-    this.setState(prevState => ({
-      passwordIsMasked: !prevState.passwordIsMasked,
-    }));
-  };
 
   handlechange = field => (event) => {
     this.setState({
       [field]: event.target.value,
     }, this.removeErrors(field));
   };
+
+  handleSubmit = async (e, openSnackbar, onSubmit) => {
+    this.setState({
+      loading: true,
+    });
+    const { name, email, password } = this.state;
+    const data = {
+      name,
+      email,
+      password,
+    };
+    e.preventDefault();
+    const result = await callApi('/api/trainee', 'post', data);
+    console.log(result.data);
+    if (result.status) {
+      onSubmit(data);
+      openSnackbar('Trainee Created', 'success');
+    } else {
+      openSnackbar('Error Message', 'error');
+      this.setState({
+        loading: false,
+      });
+    }
+  }
 
   removeErrors= field => () => {
     const {
@@ -154,7 +174,7 @@ class AddDialog extends Component {
       password,
       confirmPassword,
       error,
-      passwordIsMasked,
+      loading,
     } = this.state;
     return (
       <>
@@ -214,7 +234,7 @@ class AddDialog extends Component {
                   fullWidth
                   error={error.password}
                   value={password}
-                  type={passwordIsMasked ? 'password' : 'text'}
+                  type="password"
                   label="Password"
                   onClick={this.handlechange('password')}
                   onChange={this.handlechange('password')}
@@ -224,12 +244,7 @@ class AddDialog extends Component {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <IconButton
-                          className={classes.eye}
-                          onClick={this.togglePasswordMask}
-                        >
-                          {passwordIsMasked ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
+                        <VisibilityOff />
                       </InputAdornment>
                     ),
                   }}
@@ -241,7 +256,7 @@ class AddDialog extends Component {
                   fullWidth
                   error={error.confirmPassword}
                   value={confirmPassword}
-                  type={passwordIsMasked ? 'password' : 'text'}
+                  type="password"
                   label="Confirm Password"
                   onClick={this.handlechange('confirmPassword')}
                   onChange={this.handlechange('confirmPassword')}
@@ -251,12 +266,7 @@ class AddDialog extends Component {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <IconButton
-                          className={classes.eye}
-                          onClick={this.togglePasswordMask}
-                        >
-                          {passwordIsMasked ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
+                        <VisibilityOff />
                       </InputAdornment>
                     ),
                   }}
@@ -275,19 +285,27 @@ class AddDialog extends Component {
                     SUBMIT
                 </Button>
               ) : (
-                <SnackBarConsumer>
-                  {({ openSnackbar }) => (
-                    <Button
-                      onClick={() => {
-                        onSubmit(name, email, password);
-                        openSnackbar('New trainee added', 'success');
-                      }}
-                      color="primary"
-                    >
+                (loading === true) ? (
+                  <Button
+                    color="primary"
+                    disabled
+                  >
+                    <CircularProgress size={25} />
+                  </Button>
+                ) : (
+                  <SnackBarConsumer>
+                    {({ openSnackbar }) => (
+                      <Button
+                        onClick={(e) => {
+                          this.handleSubmit(e, openSnackbar, onSubmit);
+                        }}
+                        color="primary"
+                      >
                     SUBMIT
-                    </Button>
-                  )}
-                </SnackBarConsumer>
+                      </Button>
+                    )}
+                  </SnackBarConsumer>
+                )
               )
             }
           </DialogActions>
