@@ -26,7 +26,7 @@ class App extends Component {
             <Router>
               <Switch>
                 <Route exact path="/">
-                  <Redirect to="/login" />
+                  <Redirect to="/trainee" />
                 </Route>
                 <PrivateRoute path="/trainee" component={Trainee} />
                 <AuthRoute path="/login" component={Login} />

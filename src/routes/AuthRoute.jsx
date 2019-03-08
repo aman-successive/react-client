@@ -15,6 +15,7 @@ class AuthRoute extends Component {
 
   render() {
     const { component: ChildComponent, ...rest } = this.props;
+    localStorage.removeItem('Admin');
     return (
       <Route
         {...rest}

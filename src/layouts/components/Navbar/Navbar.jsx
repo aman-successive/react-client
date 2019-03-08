@@ -36,6 +36,10 @@ class Navbar extends Component {
     this.state = {};
   }
 
+  handleLogout = () => {
+    localStorage.removeItem('Admin');
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -49,8 +53,8 @@ class Navbar extends Component {
             <Button color="inherit"><Link color="inherit" underline="none" component={RouterLink} to="/Text">Textfield Demo</Link></Button>
             <Button color="inherit"><Link color="inherit" underline="none" component={RouterLink} to="/Input">Input Demo</Link></Button>
             <Button color="inherit"><Link color="inherit" underline="none" component={RouterLink} to="/Children">Children Demo</Link></Button>
-            <Button color="inherit">
-            Logout
+            <Button color="inherit" onClick={this.handleLogout}>
+              <Link color="inherit" underline="none" component={RouterLink} to="/login">Logout</Link>
               <Person className={classes.rightIcon} />
             </Button>
           </Toolbar>

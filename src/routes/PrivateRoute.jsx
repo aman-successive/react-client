@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { PrivateLayout } from '../layouts';
 
@@ -15,15 +15,20 @@ class PrivateRoute extends Component {
 
   render() {
     const { component: ChildComponent, ...rest } = this.props;
+    if (localStorage.getItem('Admin')) {
+      return (
+        <Route
+          {...rest}
+          render={matchProps => (
+            <PrivateLayout>
+              <ChildComponent {...matchProps} />
+            </PrivateLayout>
+          )}
+        />
+      );
+    }
     return (
-      <Route
-        {...rest}
-        render={matchProps => (
-          <PrivateLayout>
-            <ChildComponent {...matchProps} />
-          </PrivateLayout>
-        )}
-      />
+      <Redirect to="/login" />
     );
   }
 }

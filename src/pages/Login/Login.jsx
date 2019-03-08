@@ -107,9 +107,14 @@ class Login extends Component {
     e.preventDefault();
     const token = await callApi('/user/login', 'post', email, password);
     if (token.status) {
+      window.localStorage.setItem('Admin', token.data);
+      console.log(window.localStorage.getItem('Admin'));
       history.push('/trainee');
     } else {
       openSnackbar('Error Message', 'error');
+      this.setState({
+        loading: false,
+      });
     }
   }
 
