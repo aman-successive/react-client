@@ -5,19 +5,19 @@ import style from './style';
 const propTypes = {
   error: PropTypes.string,
   value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  // onChange: PropTypes.func.isRequired,
 };
 const defaultProps = {
   error: '',
 };
 const TextField = (props) => {
   const {
-    error, ...rest
+    error, value, ...rest
   } = props;
   const errorStyle = (error) ? { ...style.error } : {};
   return (
     <>
-      <input type="text" {...rest} style={{ ...style.base, ...errorStyle }} />
+      <input type="text" value={value} {...rest} style={{ ...style.base, ...errorStyle }} />
       {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}
     </>
   );
