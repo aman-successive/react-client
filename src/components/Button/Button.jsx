@@ -7,7 +7,7 @@ const propTypes = {
   disabled: PropTypes.bool,
   style: PropTypes.objectOf(PropTypes.string),
   value: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  // onClick: PropTypes.func.isRequired,
 };
 
 const defaultProps = {

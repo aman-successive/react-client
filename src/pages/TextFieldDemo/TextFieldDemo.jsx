@@ -17,15 +17,15 @@ const TextFieldDemo = () => (
     </div>
     <div>
       <h3>This is Disabled Input</h3>
-      <TextField disabled value="Disabled Input" />
+      <TextField disabled value="Disabled Input" readOnly />
     </div>
     <div>
       <h3>This is Valid Input</h3>
-      <TextField value="Accessible" />
+      <TextField value="Accessible" readOnly />
     </div>
     <div>
       <h3>This is Input with errors</h3>
-      <TextField value="101" err="Could not be greater than" />
+      <TextField value="101" err="Could not be greater than" readOnly />
     </div>
   </>
 );

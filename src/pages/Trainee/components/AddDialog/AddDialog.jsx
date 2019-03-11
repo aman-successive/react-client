@@ -1,4 +1,4 @@
-/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-restricted-syntax */
 import * as yup from 'yup';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -33,7 +33,7 @@ const propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 class AddDialog extends Component {
@@ -58,7 +58,12 @@ class AddDialog extends Component {
         confirmPassword: '',
       },
       touched: false,
-      hasError: false,
+      hasError: {
+        name: false,
+        email: false,
+        password: false,
+        confirmPassword: false,
+      },
       passwordIsMasked: true,
     };
   }
@@ -92,14 +97,14 @@ class AddDialog extends Component {
     }, { abortEarly: false }).then(() => {
       this.setState({
         error: { ...error, [field]: '' },
-        hasError: false,
+        hasError: { ...hasError, [field]: false },
         touched: true,
       });
     }).catch((err) => {
       if (!err.inner.some(errors => errors.path === field) && hasError) {
         this.setState({
           error: { ...error, [field]: '' },
-          hasError: false,
+          hasError: { ...hasError, [field]: false },
           touched: false,
         });
       }
@@ -112,6 +117,7 @@ class AddDialog extends Component {
       email,
       password,
       confirmPassword,
+      hasError,
       error,
     } = this.state;
     this.schema.validate({
@@ -124,7 +130,7 @@ class AddDialog extends Component {
         if (errors.path === field) {
           this.setState({
             error: { ...error, [field]: errors.message },
-            hasError: true,
+            hasError: { ...hasError, [field]: true },
             touched: false,
           });
         }
@@ -134,7 +140,13 @@ class AddDialog extends Component {
 
   checkDisabled = () => {
     const { touched, hasError } = this.state;
-    if (touched && !hasError) {
+    let result = false;
+    for (const i in hasError) {
+      if (hasError[i] === false) {
+        result = true;
+      }
+    }
+    if (touched && result) {
       return false;
     }
     return true;
@@ -152,6 +164,7 @@ class AddDialog extends Component {
       email,
       password,
       confirmPassword,
+      hasError,
       error,
       passwordIsMasked,
     } = this.state;
@@ -173,7 +186,7 @@ class AddDialog extends Component {
               value={name}
               label="Name *"
               fullWidth
-              error={error.name}
+              error={hasError.name}
               onClick={this.handlechange('name')}
               onChange={this.handlechange('name')}
               onBlur={this.getError('name')}
@@ -192,7 +205,7 @@ class AddDialog extends Component {
               value={email}
               label="Email Address"
               fullWidth
-              error={error.email}
+              error={hasError.email}
               onClick={this.handlechange('email')}
               onChange={this.handlechange('email')}
               onBlur={this.getError('email')}
@@ -207,11 +220,11 @@ class AddDialog extends Component {
               }}
             />
             <FormHelperText className={classes.error}>{error.email}</FormHelperText>
-            <Grid container spacing={24} fullWidth>
+            <Grid container spacing={24}>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  error={error.password}
+                  error={hasError.password}
                   value={password}
                   type={passwordIsMasked ? 'password' : 'text'}
                   label="Password"
@@ -238,7 +251,7 @@ class AddDialog extends Component {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  error={error.confirmPassword}
+                  error={hasError.confirmPassword}
                   value={confirmPassword}
                   type={passwordIsMasked ? 'password' : 'text'}
                   label="Confirm Password"

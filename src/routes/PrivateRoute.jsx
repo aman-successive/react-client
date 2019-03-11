@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { PrivateLayout } from '../layouts';
 
 const propTypes = {
-  component: PropTypes.element.isRequired,
+  component: PropTypes.func.isRequired,
 };
 
 class PrivateRoute extends Component {

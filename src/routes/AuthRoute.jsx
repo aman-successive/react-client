@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { AuthLayout } from '../layouts';
 
 const propTypes = {
-  component: PropTypes.element.isRequired,
+  component: PropTypes.func.isRequired,
 };
 
 class AuthRoute extends Component {
