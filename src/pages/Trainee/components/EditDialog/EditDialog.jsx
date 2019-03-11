@@ -15,6 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { SnackBarConsumer } from '../../../../contexts/SnackBarProvider/SnackBarProvider';
+import { callApi } from '../../../../libs/utils/api';
 
 const styles = () => ({
   eye: {
@@ -42,8 +43,9 @@ class EditDialog extends Component {
   constructor(props) {
     super(props);
     const { data } = this.props;
-    const { name, email } = data;
+    const { _id, name, email } = data;
     this.state = {
+      id: _id,
       name,
       email,
       error: {
@@ -60,6 +62,17 @@ class EditDialog extends Component {
       [field]: event.target.value,
     }, this.removeErrors(field));
   };
+
+  handleSubmit = async (e, onSubmit, data, openSnackbar) => {
+    e.preventDefault();
+    const result = await callApi('/api/trainee', 'put', data);
+    if (result.status) {
+      onSubmit(data);
+      openSnackbar(result.message, 'success');
+    } else {
+      openSnackbar('Error Message', 'error');
+    }
+  }
 
   removeErrors= field => () => {
     const {
@@ -126,6 +139,7 @@ class EditDialog extends Component {
       onSubmit,
     } = this.props;
     const {
+      id,
       name,
       email,
       error,
@@ -196,9 +210,9 @@ class EditDialog extends Component {
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => {
-                        onSubmit(name, email);
-                        openSnackbar('Data Edited', 'success');
+                      onClick={(e) => {
+                        const userData = { id, name, email };
+                        this.handleSubmit(e, onSubmit, userData, openSnackbar);
                       }}
                       color="primary"
                     >

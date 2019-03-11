@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { SnackBarConsumer } from '../../../../contexts/SnackBarProvider/SnackBarProvider';
+import { callApi } from '../../../../libs/utils/api';
 
 const styles = () => ({
   eye: {
@@ -30,6 +31,18 @@ class DeleteDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  handleSubmit = async (e, onSubmit, data, openSnackbar) => {
+    e.preventDefault();
+    const { _id } = data;
+    const result = await callApi(`/api/trainee/${_id}`, 'delete', {});
+    if (result.status) {
+      onSubmit(data);
+      openSnackbar(result.message, 'success');
+    } else {
+      openSnackbar(result.message, 'error');
+    }
   }
 
   render() {
@@ -62,12 +75,11 @@ class DeleteDialog extends Component {
                 CANCEL
                 </Button>
                 <Button
-                  onClick={() => {
-                    onSubmit(data);
+                  onClick={(e) => {
                     if (data.createdAt < Date) {
-                      openSnackbar('Trainee cannot be deleted ', 'error');
+                      openSnackbar('Trainee Cannot be deleted', 'error');
                     } else {
-                      openSnackbar('Trainee deleted ', 'success');
+                      this.handleSubmit(e, onSubmit, data, openSnackbar);
                     }
                   }}
                   color="primary"

@@ -13,6 +13,7 @@ import TableHead from '@material-ui/core/TableHead';
 import IconButton from '@material-ui/core/IconButton';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import withLoaderAndMessage from '../HOC';
 
 const propTypes = {
   id: PropTypes.string,
@@ -156,4 +157,4 @@ class Tables extends Component {
 Tables.propTypes = propTypes;
 Tables.defaultProps = defaultProps;
 
-export default withStyles(styles)(Tables);
+export default withStyles(styles)(withLoaderAndMessage(Tables));

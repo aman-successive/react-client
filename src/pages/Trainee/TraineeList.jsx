@@ -7,7 +7,6 @@ import {
   AddDialog, EditDialog, DeleteDialog,
 } from './components';
 import { Tables } from '../../components';
-import trainees from './data/trainee';
 import columnData from './data/column';
 import { callApi } from '../../libs/utils/api';
 
@@ -27,9 +26,23 @@ class TraineeList extends Component {
       page: 0,
       data: '',
       traineeList: '',
-      limit: 20,
+      limit: 10,
       skip: 0,
+      loading: true,
     };
+    const { limit, skip } = this.state;
+    callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
+      if (list.status) {
+        this.setState({
+          traineeList: list.data.records,
+          loading: false,
+        });
+      } else {
+        this.setState({
+          loading: false,
+        });
+      }
+    });
   }
 
   handleRequestSort = (property) => {
@@ -69,9 +82,22 @@ class TraineeList extends Component {
 
   handlePageChange = (event, pages) => {
     this.setState({
+      loading: true,
       page: pages,
-      skip: 20 * pages,
-      limit: 20 * (pages + 1),
+      skip: 10 * pages,
+    });
+    const { limit, skip } = this.state;
+    callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
+      if (list.status) {
+        this.setState({
+          traineeList: list.data.records,
+          loading: false,
+        });
+      } else {
+        this.setState({
+          loading: false,
+        });
+      }
     });
   }
 
@@ -103,14 +129,8 @@ class TraineeList extends Component {
       editDialogOpen,
       deleteDialogOpen,
       traineeList,
-      limit,
-      skip,
+      loading,
     } = this.state;
-    callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
-      this.setState({
-        traineeList: list.data.records,
-      });
-    });
     return (
       <>
         <Button style={{ margin: 10 }} variant="outlined" color="primary" onClick={this.handleClickOpen}>
@@ -137,7 +157,7 @@ class TraineeList extends Component {
         }
         <Tables
           id="id"
-          data={traineeList || trainees}
+          data={traineeList}
           columns={columnData}
           actions={[
             {
@@ -153,9 +173,11 @@ class TraineeList extends Component {
           orderBy={orderBy}
           onSort={this.handleRequestSort}
           onSelect={this.handleSelect}
-          rowsPerPage={20}
-          count={100}
+          rowsPerPage={10}
+          count={200}
           page={page}
+          dataLength={traineeList.length}
+          loading={loading}
           onChangePage={this.handlePageChange}
         />
       </>
