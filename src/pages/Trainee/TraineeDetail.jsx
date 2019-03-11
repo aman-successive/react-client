@@ -62,11 +62,7 @@ class TraineeDetail extends Component {
     return trainee;
   }
 
-  getDateFormatted = (date) => {
-    moment.defaultFormat = 'dddd, MMMM Do YYYY, h:mm:ss a';
-    const newDate = moment.utc(date).toDate().toString();
-    return (moment(newDate).format(moment.defaultFormat));
-  }
+  getDateFormatted = date => (moment(date).format('LLLL'))
 
   render() {
     const { classes, match } = this.props;

@@ -37,7 +37,7 @@ class TraineeList extends Component {
           <ul>
             {
               trainees.map(trainee => (
-                <li>
+                <li key={trainee.id}>
                   <Link
                     to={`/trainee/${trainee.id}`}
                   >

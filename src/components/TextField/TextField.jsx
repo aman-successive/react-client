@@ -5,7 +5,7 @@ import style from './style';
 const propTypes = {
   error: PropTypes.string,
   value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  // onChange: PropTypes.func.isRequired,
 };
 const defaultProps = {
   error: '',

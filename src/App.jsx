@@ -19,7 +19,7 @@ class App extends Component {
   render() {
     return (
       <>
-        <MuiThemeProvider thme={theme}>
+        <MuiThemeProvider theme={theme}>
           <CssBaseline />
           <Router>
             <Switch>

@@ -5,7 +5,7 @@ import { getRandomNumber, getNextRoundRobin } from '../../libs/utils/math';
 
 const propTypes = {
   altText: PropTypes.string,
-  banners: PropTypes.arr,
+  banners: PropTypes.arrayOf(PropTypes.string),
   defaultBanner: PropTypes.string,
   duration: PropTypes.number,
   height: PropTypes.number,
