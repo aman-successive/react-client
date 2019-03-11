@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import { AddDialog } from './components';
+import { AddDialog, Tables } from './components';
 import trainees from './data/trainee';
+import columnData from './data/column';
 
 class TraineeList extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class TraineeList extends Component {
         Add Trainee
         </Button>
         <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
+        <Tables id="id" data={trainees} columns={columnData} />
         <div>
           <ul>
             {
