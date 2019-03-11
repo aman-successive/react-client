@@ -12,12 +12,12 @@ const defaultProps = {
 };
 const TextField = (props) => {
   const {
-    error, ...rest
+    error, value, ...rest
   } = props;
   const errorStyle = (error) ? { ...style.error } : {};
   return (
     <>
-      <input type="text" {...rest} style={{ ...style.base, ...errorStyle }} />
+      <input type="text" value={value} {...rest} style={{ ...style.base, ...errorStyle }} />
       {(error) ? <p style={{ color: 'red' }}>{error}</p> : ''}
     </>
   );

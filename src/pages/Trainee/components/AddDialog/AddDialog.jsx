@@ -164,8 +164,8 @@ class AddDialog extends Component {
       email,
       password,
       confirmPassword,
-      error,
       hasError,
+      error,
       passwordIsMasked,
     } = this.state;
     return (
@@ -220,7 +220,7 @@ class AddDialog extends Component {
               }}
             />
             <FormHelperText className={classes.error}>{error.email}</FormHelperText>
-            <Grid container spacing={24} fullWidth>
+            <Grid container spacing={24}>
               <Grid item xs={6}>
                 <TextField
                   fullWidth

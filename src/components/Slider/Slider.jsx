@@ -13,7 +13,7 @@ const propTypes = {
 };
 const defaultProps = {
   altText: 'Default Banner',
-  banners: '',
+  banners: [],
   defaultBanner: DEFAULT_BANNER_IMAGE,
   duration: 2000,
   height: 200,
