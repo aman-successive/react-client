@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import { CircularProgress } from '@material-ui/core';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { SnackBarConsumer } from '../../../../contexts/SnackBarProvider/SnackBarProvider';
 import { callApi } from '../../../../libs/utils/api';
@@ -30,17 +31,26 @@ const propTypes = {
 class DeleteDialog extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loading: false,
+    };
   }
 
   handleSubmit = async (e, onSubmit, data, openSnackbar) => {
     e.preventDefault();
+    this.setState({
+      loading: true,
+    });
     const { _id } = data;
     const result = await callApi(`/api/trainee/${_id}`, 'delete', {});
-    if (result.status) {
+    this.setState({
+      loading: false,
+    });
+    if (result.status === 200) {
       onSubmit(data);
-      openSnackbar(result.message, 'success');
+      openSnackbar(result.data.message, 'success');
     } else {
+      onSubmit({});
       openSnackbar(result.message, 'error');
     }
   }
@@ -53,6 +63,7 @@ class DeleteDialog extends Component {
       onSubmit,
       data,
     } = this.props;
+    const { loading } = this.state;
     return (
       <>
         <SnackBarConsumer>
@@ -83,8 +94,11 @@ class DeleteDialog extends Component {
                     }
                   }}
                   color="primary"
+                  disabled={loading}
                 >
-                DELETE
+                  {
+                    loading ? <CircularProgress size={25} /> : 'DELETE'
+                  }
                 </Button>
               </DialogActions>
             </Dialog>

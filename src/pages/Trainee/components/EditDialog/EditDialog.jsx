@@ -2,7 +2,7 @@
 import * as yup from 'yup';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TextField } from '@material-ui/core';
+import { TextField, CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -43,11 +43,15 @@ class EditDialog extends Component {
   constructor(props) {
     super(props);
     const { data } = this.props;
-    const { _id, name, email } = data;
+    const {
+      name, email, originalId, password,
+    } = data;
     this.state = {
-      id: _id,
+      id: originalId,
       name,
       email,
+      password,
+      loading: false,
       error: {
         name: '',
         email: '',
@@ -65,12 +69,19 @@ class EditDialog extends Component {
 
   handleSubmit = async (e, onSubmit, data, openSnackbar) => {
     e.preventDefault();
+    this.setState({
+      loading: true,
+    });
     const result = await callApi('/api/trainee', 'put', data);
-    if (result.status) {
+    this.setState({
+      loading: false,
+    });
+    if (result.status === 200) {
       onSubmit(data);
-      openSnackbar(result.message, 'success');
+      openSnackbar(result.data.message, 'success');
     } else {
-      openSnackbar('Error Message', 'error');
+      onSubmit({});
+      openSnackbar(result.message, 'error');
     }
   }
 
@@ -142,7 +153,9 @@ class EditDialog extends Component {
       id,
       name,
       email,
+      password,
       error,
+      loading,
     } = this.state;
     return (
       <>
@@ -211,12 +224,17 @@ class EditDialog extends Component {
                   ) : (
                     <Button
                       onClick={(e) => {
-                        const userData = { id, name, email };
+                        const userData = {
+                          id, name, email, password,
+                        };
                         this.handleSubmit(e, onSubmit, userData, openSnackbar);
                       }}
                       color="primary"
+                      disable={loading}
                     >
-                      SUBMIT
+                      {
+                        loading ? <CircularProgress size={25} /> : 'SUBMIT'
+                      }
                     </Button>
                   )
                 }

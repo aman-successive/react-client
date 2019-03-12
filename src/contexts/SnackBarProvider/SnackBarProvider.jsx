@@ -78,7 +78,7 @@ class SnackBarProvider extends Component {
             horizontal: 'left',
           }}
           open={isOpen}
-          autoHideDuration={4000}
+          autoHideDuration={3000}
           onClose={this.closeSnackbar}
         >
           <SnackbarContent

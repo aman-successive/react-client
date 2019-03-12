@@ -8,9 +8,9 @@ export const callApi = async (url, userMethod, userData) => {
       data: userData,
       headers: { Authorization: localStorage.getItem('Admin') },
     });
-    return res.data;
+    console.log(res);
+    return res;
   } catch (err) {
-    console.log(err);
     return err;
   }
 };

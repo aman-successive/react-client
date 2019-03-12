@@ -84,12 +84,12 @@ class AddDialog extends Component {
     };
     e.preventDefault();
     const result = await callApi('/api/trainee', 'post', data);
-    console.log(result.data);
-    if (result.status) {
+    if (result.status === 200) {
       onSubmit(data);
-      openSnackbar('Trainee Created', 'success');
+      openSnackbar(result.data.message, 'success');
     } else {
-      openSnackbar('Error Message', 'error');
+      onSubmit({});
+      openSnackbar(result.message, 'error');
       this.setState({
         loading: false,
       });
@@ -285,27 +285,21 @@ class AddDialog extends Component {
                     SUBMIT
                 </Button>
               ) : (
-                (loading === true) ? (
-                  <Button
-                    color="primary"
-                    disabled
-                  >
-                    <CircularProgress size={25} />
-                  </Button>
-                ) : (
-                  <SnackBarConsumer>
-                    {({ openSnackbar }) => (
-                      <Button
-                        onClick={(e) => {
-                          this.handleSubmit(e, openSnackbar, onSubmit);
-                        }}
-                        color="primary"
-                      >
-                    SUBMIT
-                      </Button>
-                    )}
-                  </SnackBarConsumer>
-                )
+                <SnackBarConsumer>
+                  {({ openSnackbar }) => (
+                    <Button
+                      onClick={(e) => {
+                        this.handleSubmit(e, openSnackbar, onSubmit);
+                      }}
+                      color="primary"
+                      disabled={loading}
+                    >
+                      {
+                        loading ? <CircularProgress size={25} /> : 'SUBMIT'
+                      }
+                    </Button>
+                  )}
+                </SnackBarConsumer>
               )
             }
           </DialogActions>

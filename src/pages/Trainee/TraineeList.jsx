@@ -9,6 +9,7 @@ import {
 import { Tables } from '../../components';
 import columnData from './data/column';
 import { callApi } from '../../libs/utils/api';
+import { SnackBarConsumer } from '../../contexts/SnackBarProvider/SnackBarProvider';
 
 const propTypes = {
   history: PropTypes.objectOf(PropTypes.object).isRequired,
@@ -29,16 +30,19 @@ class TraineeList extends Component {
       limit: 10,
       skip: 0,
       loading: true,
+      snackBarError: '',
     };
     const { limit, skip } = this.state;
     callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
-      if (list.status) {
+      if (list.status === 200) {
         this.setState({
-          traineeList: list.data.records,
+          snackBarError: '',
+          traineeList: list.data.data.records,
           loading: false,
         });
       } else {
         this.setState({
+          snackBarError: list.message,
           loading: false,
         });
       }
@@ -78,19 +82,11 @@ class TraineeList extends Component {
   handleDeleteDialogSubmit = (values) => {
     console.log('Deleted Data', values);
     this.setState({ deleteDialogOpen: false, data: '' });
-  }
-
-  handlePageChange = (event, pages) => {
-    this.setState({
-      loading: true,
-      page: pages,
-      skip: 10 * pages,
-    });
     const { limit, skip } = this.state;
     callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
-      if (list.status) {
+      if (list.status === 200) {
         this.setState({
-          traineeList: list.data.records,
+          traineeList: list.data.data.records,
           loading: false,
         });
       } else {
@@ -101,9 +97,44 @@ class TraineeList extends Component {
     });
   }
 
+  handlePageChange = (event, pages) => {
+    this.setState({
+      loading: true,
+      page: pages,
+      skip: 10 * pages,
+    }, () => {
+      const { limit, skip } = this.state;
+      callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
+        if (list.status === 200) {
+          this.setState({
+            traineeList: list.data.data.records,
+            loading: false,
+          });
+        } else {
+          this.setState({
+            loading: false,
+          });
+        }
+      });
+    });
+  }
+
   handleEditDialogSubmit = (...values) => {
     console.log(...values);
     this.setState({ editDialogOpen: false, data: '' });
+    const { limit, skip } = this.state;
+    callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
+      if (list.status === 200) {
+        this.setState({
+          traineeList: list.data.data.records,
+          loading: false,
+        });
+      } else {
+        this.setState({
+          loading: false,
+        });
+      }
+    });
   };
 
   handleSubmit = (...values) => {
@@ -119,6 +150,13 @@ class TraineeList extends Component {
     this.setState({ open: false });
   };
 
+  handleSnackBar = (snackBarError, openSnackbar) => {
+    openSnackbar(snackBarError, 'error');
+    this.setState({
+      snackBarError: '',
+    });
+  }
+
   render() {
     const {
       open,
@@ -130,6 +168,7 @@ class TraineeList extends Component {
       deleteDialogOpen,
       traineeList,
       loading,
+      snackBarError,
     } = this.state;
     return (
       <>
@@ -155,31 +194,38 @@ class TraineeList extends Component {
             </>
           ) : ''
         }
-        <Tables
-          id="id"
-          data={traineeList}
-          columns={columnData}
-          actions={[
-            {
-              icon: <EditIcon style={{ fontSize: 17 }} />,
-              handler: this.handleEditDialogOpen,
-            },
-            {
-              icon: <DeleteIcon style={{ fontSize: 17 }} />,
-              handler: this.handleDeleteDialogOpen,
-            },
-          ]}
-          order={order}
-          orderBy={orderBy}
-          onSort={this.handleRequestSort}
-          onSelect={this.handleSelect}
-          rowsPerPage={10}
-          count={200}
-          page={page}
-          dataLength={traineeList.length}
-          loading={loading}
-          onChangePage={this.handlePageChange}
-        />
+        <SnackBarConsumer>
+          {({ openSnackbar }) => ((snackBarError) ? (
+            this.handleSnackBar(snackBarError, openSnackbar)
+          ) : (
+            <Tables
+              id="id"
+              data={traineeList}
+              columns={columnData}
+              actions={[
+                {
+                  icon: <EditIcon style={{ fontSize: 17 }} />,
+                  handler: this.handleEditDialogOpen,
+                },
+                {
+                  icon: <DeleteIcon style={{ fontSize: 17 }} />,
+                  handler: this.handleDeleteDialogOpen,
+                },
+              ]}
+              order={order}
+              orderBy={orderBy}
+              onSort={this.handleRequestSort}
+              onSelect={this.handleSelect}
+              rowsPerPage={10}
+              count={200}
+              page={page}
+              dataLength={traineeList.length}
+              loading={loading}
+              onChangePage={this.handlePageChange}
+            />
+          ))
+          }
+        </SnackBarConsumer>
       </>
     );
   }
