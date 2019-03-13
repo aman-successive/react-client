@@ -87,6 +87,13 @@ class AddDialog extends Component {
     if (result.status === 200) {
       onSubmit(data);
       openSnackbar(result.data.message, 'success');
+      this.setState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        loading: false,
+      });
     } else {
       onSubmit({});
       openSnackbar(result.message, 'error');

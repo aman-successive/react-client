@@ -10,9 +10,9 @@ import { Button } from '@material-ui/core';
 import Hidden from '@material-ui/core/Hidden';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import trainees from './data/trainee';
 import NoMatch from '../NoMatch';
 import getDateFormatted from '../../libs/utils/moment';
+import { callApi } from '../../libs/utils/api';
 
 const styles = theme => ({
   layout: {
@@ -48,23 +48,34 @@ const propTypes = {
 class TraineeDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      trainee: '',
+    };
   }
 
-  getTrainee = (id) => {
-    let trainee;
-    trainees.forEach((traineeDetail) => {
-      if (traineeDetail.id === id) {
-        trainee = traineeDetail;
+  getTrainee = async (id) => {
+    let trainees;
+    const newId = 'id';
+    callApi('/api/trainee', 'get', {}).then((list) => {
+      if (list.status === 200) {
+        trainees = list.data.data.records;
       }
+      trainees.forEach((traineeDetail) => {
+        if (traineeDetail[newId] === id) {
+          this.setState({
+            trainee: traineeDetail,
+          });
+        }
+      });
     });
-    return trainee;
   }
 
   render() {
     const { classes, match } = this.props;
     const { id } = match.params;
-    const trainee = this.getTrainee(id);
+    this.getTrainee(id);
+    const { trainee } = this.state;
+    console.log(this.state);
     if (!trainee) {
       return <NoMatch />;
     }

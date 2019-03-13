@@ -115,31 +115,7 @@ class TraineeList extends Component {
     });
   }
 
-  handlePageChange = (event, pages) => {
-    this.setState({
-      loading: true,
-      page: pages,
-      skip: 10 * pages,
-    }, () => {
-      const { limit, skip } = this.state;
-      callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
-        if (list.status === 200) {
-          this.setState({
-            traineeList: list.data.data.records,
-            loading: false,
-          });
-        } else {
-          this.setState({
-            loading: false,
-          });
-        }
-      });
-    });
-  }
-
-  handleEditDialogSubmit = (...values) => {
-    console.log(...values);
-    this.setState({ editDialogOpen: false, data: '' });
+  showTable = () => {
     const { limit, skip } = this.state;
     callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
       if (list.status === 200) {
@@ -153,6 +129,22 @@ class TraineeList extends Component {
         });
       }
     });
+  }
+
+  handlePageChange = (event, pages) => {
+    this.setState({
+      loading: true,
+      page: pages,
+      skip: 10 * pages,
+    }, () => {
+      this.showTable();
+    });
+  }
+
+  handleEditDialogSubmit = (...values) => {
+    console.log(...values);
+    this.setState({ editDialogOpen: false, data: '' });
+    this.showTable();
   };
 
   handleSubmit = (...values) => {

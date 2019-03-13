@@ -116,7 +116,7 @@ class Tables extends Component {
               data.map(trainee => (
                 <TableRow key={trainee.id} hover className={classes.tableRow}>
                   {
-                    columns.map(cell => <TableCell onClick={() => onSelect(trainee.id)} key={cell.field} align={cell.align}>{(cell.format) ? cell.format(trainee[cell.field]) : trainee[cell.field]}</TableCell>)
+                    columns.map(cell => <TableCell onClick={() => onSelect(trainee._id)} key={cell.field} align={cell.align}>{(cell.format) ? cell.format(trainee[cell.field]) : trainee[cell.field]}</TableCell>)
                   }
                   <TableCell>
                     {
