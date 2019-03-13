@@ -88,6 +88,24 @@ class TraineeList extends Component {
         this.setState({
           traineeList: list.data.data.records,
           loading: false,
+        }, () => {
+          const { traineeList, page } = this.state;
+          if (traineeList.length === 0) {
+            const previousPage = page - 1;
+            this.setState({
+              loading: true,
+              page: previousPage,
+              skip: 10 * previousPage,
+            });
+            callApi(`/api/trainee?limit=${limit}&skip=${skip - limit}`, 'get', {}).then((newList) => {
+              if (newList.status === 200) {
+                this.setState({
+                  traineeList: newList.data.data.records,
+                  loading: false,
+                });
+              }
+            });
+          }
         });
       } else {
         this.setState({
