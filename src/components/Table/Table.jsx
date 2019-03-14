@@ -88,6 +88,7 @@ class Tables extends Component {
       rowsPerPage,
       onChangePage,
     } = this.props;
+    const newId = '_id';
     return (
       <Paper className={classes.root}>
         <Table className={classes.table} key={id}>
@@ -116,7 +117,7 @@ class Tables extends Component {
               data.map(trainee => (
                 <TableRow key={trainee.id} hover className={classes.tableRow}>
                   {
-                    columns.map(cell => <TableCell onClick={() => onSelect(trainee._id)} key={cell.field} align={cell.align}>{(cell.format) ? cell.format(trainee[cell.field]) : trainee[cell.field]}</TableCell>)
+                    columns.map(cell => <TableCell onClick={() => onSelect(trainee[newId])} key={cell.field} align={cell.align}>{(cell.format) ? cell.format(trainee[cell.field]) : trainee[cell.field]}</TableCell>)
                   }
                   <TableCell>
                     {

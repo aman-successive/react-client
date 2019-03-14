@@ -11,22 +11,16 @@ function withLoaderAndMessage(Component) {
 
     render() {
       const { loading, dataLength } = this.props;
-      if (loading === true && !dataLength) {
+      if (loading === true) {
         return (
-          <div>
-            <CircularProgress />
+          <div style={{ textAlign: 'center' }}>
+            <CircularProgress size={100} />
           </div>
         );
       } if (loading === false && dataLength) {
         return (
           <div>
             <Component {...this.props} />
-          </div>
-        );
-      } if (loading === true && dataLength) {
-        return (
-          <div>
-            <CircularProgress />
           </div>
         );
       }

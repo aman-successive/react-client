@@ -6,11 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
 import Hidden from '@material-ui/core/Hidden';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import NoMatch from '../NoMatch';
 import getDateFormatted from '../../libs/utils/moment';
 import { callApi } from '../../libs/utils/api';
 
@@ -50,12 +49,15 @@ class TraineeDetail extends Component {
     super(props);
     this.state = {
       trainee: '',
+      loading: true,
     };
   }
 
-  getTrainee = async (id) => {
+  componentDidMount = () => {
     let trainees;
-    const newId = 'id';
+    const { match } = this.props;
+    const { id } = match.params;
+    const newId = '_id';
     callApi('/api/trainee', 'get', {}).then((list) => {
       if (list.status === 200) {
         trainees = list.data.data.records;
@@ -64,6 +66,7 @@ class TraineeDetail extends Component {
         if (traineeDetail[newId] === id) {
           this.setState({
             trainee: traineeDetail,
+            loading: false,
           });
         }
       });
@@ -71,13 +74,14 @@ class TraineeDetail extends Component {
   }
 
   render() {
-    const { classes, match } = this.props;
-    const { id } = match.params;
-    this.getTrainee(id);
-    const { trainee } = this.state;
-    console.log(this.state);
-    if (!trainee) {
-      return <NoMatch />;
+    const { classes } = this.props;
+    const { trainee, loading } = this.state;
+    if (loading === true) {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <CircularProgress size={70} />
+        </div>
+      );
     }
     return (
       <>

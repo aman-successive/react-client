@@ -26,6 +26,7 @@ class TraineeList extends Component {
       orderBy: '',
       page: 0,
       data: '',
+      count: 100,
       traineeList: '',
       limit: 10,
       skip: 0,
@@ -38,6 +39,7 @@ class TraineeList extends Component {
         this.setState({
           snackBarError: '',
           traineeList: list.data.data.records,
+          count: list.data.data.count,
           loading: false,
         });
       } else {
@@ -86,6 +88,7 @@ class TraineeList extends Component {
     callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
       if (list.status === 200) {
         this.setState({
+          count: list.data.data.count,
           traineeList: list.data.data.records,
           loading: false,
         }, () => {
@@ -100,6 +103,7 @@ class TraineeList extends Component {
             callApi(`/api/trainee?limit=${limit}&skip=${skip - limit}`, 'get', {}).then((newList) => {
               if (newList.status === 200) {
                 this.setState({
+                  count: list.data.data.count,
                   traineeList: newList.data.data.records,
                   loading: false,
                 });
@@ -120,6 +124,7 @@ class TraineeList extends Component {
     callApi(`/api/trainee?limit=${limit}&skip=${skip}`, 'get', {}).then((list) => {
       if (list.status === 200) {
         this.setState({
+          count: list.data.data.count,
           traineeList: list.data.data.records,
           loading: false,
         });
@@ -150,6 +155,7 @@ class TraineeList extends Component {
   handleSubmit = (...values) => {
     this.setState({ open: false });
     console.log(...values);
+    this.showTable();
   };
 
   handleClickOpen = () => {
@@ -178,6 +184,7 @@ class TraineeList extends Component {
       deleteDialogOpen,
       traineeList,
       loading,
+      count,
       snackBarError,
     } = this.state;
     return (
@@ -227,7 +234,7 @@ class TraineeList extends Component {
               onSort={this.handleRequestSort}
               onSelect={this.handleSelect}
               rowsPerPage={10}
-              count={200}
+              count={count}
               page={page}
               dataLength={traineeList.length}
               loading={loading}
